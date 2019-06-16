@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+        <title>Image Slider plugin v1.0</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="imageslider.css" />
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="imageslider.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#sample").imageSlider({
+                    sliderWidth: 600, //defines the slider width in px, can be set to "100%" to fit its container
+                    sliderHeight: 400, //defines the slider height in px, can be set to "100%" to fit its container
+                    sliderDirection: "ltr", //default: "ltr", defines the rotation direction of the slider
+                    showNavigation: true, //default: true, defines if the navigation should be shown
+                    navigationPosition: "sides", //default: "sides", options: "sides"|"top"|"bottom", defines the position of the navigation controls
+                    navigationType: "arrows", //default: "arrows", options: "arrows"|"dots"|"numeric", defines the type of navigation controls, if "sides" position was selected controls will be set to "arrows"
+                    navigationOrientation: "horizontal", //default: "horizontal", defines the rotation orientation of the slider
+                    autoPlay: false, //defines if the slider should automatically rotate the slides
+                    autoPlayFrequency: 5000 //defines the rotation speed in ms of the slides if set to autoplay
+                });
+            });
+        </script>
+	</head>
+	<body>
+        <ul id="sample">
+            <li><img src="images/1.jpg" alt="Image 1" title="Image 1" /></li>
+            <li><img src="images/2.jpg" alt="Image 2" title="Image 2" /></li>
+            <li><img src="images/3.jpg" alt="Image 3" title="Image 3" /></li>
+            <li><img src="images/4.jpg" alt="Image 4" title="Image 4" /></li>
+            <li><img src="images/5.jpg" alt="Image 5" title="Image 5" /></li>
+            <li><img src="images/6.jpg" alt="Image 6" title="Image 6" /></li>
+            <li><img src="images/7.jpg" alt="Image 7" title="Image 7" /></li>
+            <li><img src="images/8.jpg" alt="Image 8" title="Image 8" /></li>
+        </ul>
+	</body>
+</html>
