@@ -1,6 +1,7 @@
 //***********************************************************//
 //Image Slider plugin v1.0 - 15/06/2019
 //***********************************************************//
+var sliderId;
 $.fn.imageSlider = function (options) {
 	//wrap the input with a <div>
     this.wrap("<div class='imageSlider'></div>");
@@ -16,16 +17,18 @@ $.fn.imageSlider = function (options) {
         autoPlay: true,
         autoPlayFrequency: 5000
     }, options);
-    $(".imageSlider").css("width", settings.sliderWidth);
-    $(".imageSlider").css("height", settings.sliderHeight);    
+    this.parent(".imageSlider").css("width", settings.sliderWidth);
+    this.parent(".imageSlider").css("height", settings.sliderHeight);
     if (settings.sliderDirection == null || settings.sliderDirection.length == 0) {
         settings.sliderDirection = "ltr";
     }
     if (settings.navigationOrientation == null || settings.navigationOrientation.length == 0) {
         settings.navigationOrientation = "horizontal";
     }
-    $(".imageSlider").attr("data-direction", settings.sliderDirection);
-    $(".imageSlider").attr("data-orientation", settings.navigationOrientation);
+    sliderId = this.parent(".imageSlider").index();
+    this.parent(".imageSlider").attr("data-slider", sliderId);
+    this.parent(".imageSlider").attr("data-direction", settings.sliderDirection);
+    this.parent(".imageSlider").attr("data-orientation", settings.navigationOrientation);
     if (settings.showNavigation == true && this.find("li").length > 1) {        
         if (settings.navigationPosition == null || settings.navigationPosition.length == 0) {
             settings.navigationPosition = "sides";
@@ -34,7 +37,7 @@ $.fn.imageSlider = function (options) {
             settings.navigationType = "arrows";
         }
 
-        $(".imageSlider").append("<div class='navigationHolder' data-position='" + settings.navigationPosition + "'></div>");
+        this.parent(".imageSlider").append("<div class='navigationHolder' data-position='" + settings.navigationPosition + "'></div>");
         var arrowNext = document.createElement("div");
         $(arrowNext).addClass("navigationNext");
         $(arrowNext).attr("title", "Next");        
@@ -57,14 +60,14 @@ $.fn.imageSlider = function (options) {
         }
 
         if (settings.navigationPosition == "sides") {
-            $(".navigationHolder").append($(arrowNext));
-            $(".navigationHolder").append($(arrowPrev));
+            this.parent().find(".navigationHolder").append($(arrowNext));
+            this.parent().find(".navigationHolder").append($(arrowPrev));
         }
         if (settings.navigationPosition == "top" || settings.navigationPosition == "bottom") {
-            $(".navigationHolder").attr("data-orientation", settings.navigationOrientation);
+            this.parent().find(".navigationHolder").attr("data-orientation", settings.navigationOrientation);
             if (settings.navigationType == "arrows") {
-                $(".navigationHolder").append($(arrowNext));
-                $(".navigationHolder").append($(arrowPrev));
+                this.parent().find(".navigationHolder").append($(arrowNext));
+                this.parent().find(".navigationHolder").append($(arrowPrev));
             }
             else {
                 var pageCount = this.find("li").length;
@@ -83,17 +86,17 @@ $.fn.imageSlider = function (options) {
                         $(pager).append("<span title='" + currentPage + "' data-page='" + i + "'></span>");
                     }
                 }                
-                $(".navigationHolder").append($(pager));
+                this.parent().find(".navigationHolder").append($(pager));
             }
         }
         var totalWidth = 0;
         var height = 0;
         var slidesCount = this.find("li").length;
-        var sliderWidth = $(".imageSlider").width();
-        var sliderHeight = $(".imageSlider").height();
+        var sliderWidth = this.parent(".imageSlider").width();
+        var sliderHeight = this.parent(".imageSlider").height();
         var firstSlide = this.find("li:first-child");
         $(firstSlide).addClass("active");
-        var firstPage = $(".navigationHolder .pager span:first-child");
+        var firstPage = this.parent().find(".navigationHolder .pager span:first-child");
         $(firstPage).addClass("active");
         for (i = 0; i <= slidesCount; i++) {
             var me = this.find("li")[i];
@@ -118,31 +121,32 @@ $.fn.imageSlider = function (options) {
         this.css("width", totalWidth);
         this.css("height", height);
     }
-    $(".navigationHolder .pager span").click(function () {
+    var holder = $(".imageSlider[data-slider=" + sliderId + "]");
+    $(holder).find(".navigationHolder .pager span").click(function () {
         var pageIndex = $(this).data("page");
-        navigate(pageIndex, false, settings);
+        navigate(pageIndex, false, settings, holder);
     });    
-    $(".navigationHolder .navigationNext").click(function () {
-        var slidesNumber = parseInt($(".imageSlider").find("li").length);
-        var activeSlide = $(".imageSlider li.active");
+    $(holder).find(".navigationHolder .navigationNext").click(function () {
+        var slidesNumber = parseInt($(holder).find("li").length);
+        var activeSlide = $(holder).find("li.active");
         var activeSlidePosition = parseInt($(activeSlide).index());
         var nextSlide = (activeSlidePosition == (slidesNumber - 1) ? 0 : (activeSlidePosition + 1));
-        navigate(nextSlide, false, settings);
+        navigate(nextSlide, false, settings, holder);
     });
-    $(".navigationHolder .navigationPrev").click(function () {
-        var slidesNumber = parseInt($(".imageSlider").find("li").length);
-        var activeSlide = $(".imageSlider li.active");
+    $(holder).find(".navigationHolder .navigationPrev").click(function () {
+        var slidesNumber = parseInt($(holder).find("li").length);
+        var activeSlide = $(holder).find("li.active");
         var activeSlidePosition = parseInt($(activeSlide).index());
         var prevSlide = (activeSlidePosition == 0 ? (slidesNumber - 1) : (activeSlidePosition - 1));
-        navigate(prevSlide, false, settings);
+        navigate(prevSlide, false, settings, holder);
     });
     if (settings.autoPlay == true && this.find("li").length > 1) {
-        navigate(0, true, settings);
+        navigate(0, true, settings, holder);
     }
 };
 var fn;
-function navigate(index, auto, settings) {
-    var slide = $(".imageSlider").find("li")[index];
+function navigate(index, auto, settings, holder) {
+    var slide = $(holder).find("li")[index];
     $(slide).addClass("active");
     $(slide).css("top", 0);
     if (settings.sliderDirection == "ltr") {
@@ -154,8 +158,8 @@ function navigate(index, auto, settings) {
     $(slide).siblings().removeClass("active");
     var prevSlides = $(slide).prevAll();
     var nextSlides = $(slide).nextAll();
-    var sliderWidth = $(".imageSlider").width();
-    var sliderHeight = $(".imageSlider").height();
+    var sliderWidth = $(holder).width();
+    var sliderHeight = $(holder).height();
     for (var i = $(prevSlides).length; i >= 0; i--) {
         var me = $(prevSlides)[i - 1];
         if (settings.navigationOrientation == "horizontal") {
@@ -188,12 +192,12 @@ function navigate(index, auto, settings) {
             $(me).css("top", "-" + y + "px");
         }
     }
-    var pager = $(".navigationHolder .pager span[data-page=" + index + "]");
+    var pager = $(holder).find(".navigationHolder .pager span[data-page=" + index + "]");
     $(pager).addClass("active");
     $(pager).siblings().removeClass("active");
     if (auto == true) {
-        var slidesNumber = parseInt($(".imageSlider").find("li").length);
-        var activeSlide = $(".imageSlider li.active");
+        var slidesNumber = parseInt($(holder).find("li").length);
+        var activeSlide = $(holder).find("li.active");
         var activeSlidePosition = parseInt($(activeSlide).index());
         var nextSlide = (activeSlidePosition == (slidesNumber - 1) ? 0 : (index + 1));
         fn = setTimeout(function () {            
