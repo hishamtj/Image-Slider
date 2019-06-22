@@ -10,15 +10,15 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 $("#sample").imageSlider({
-                    sliderWidth: 600,
-                    sliderHeight: 400,
-                    sliderDirection: "ltr",
-                    showNavigation: true,
-                    navigationPosition: "sides",
-                    navigationType: "arrows",
-                    navigationOrientation: "horizontal",
-                    autoPlay: false,
-                    autoPlayFrequency: 5000
+                    sliderWidth: 600, //defines the slider width in px, can be set to "100%" to fit its container
+                    sliderHeight: 400, //defines the slider height in px, can be set to "100%" to fit its container
+                    sliderDirection: "ltr", //default: "ltr", defines the rotation direction of the slider
+                    showNavigation: true, //default: true, defines if the navigation should be shown
+                    navigationPosition: "sides", //default: "sides", options: "sides"|"top"|"bottom", defines the position of the navigation controls
+                    navigationType: "arrows", //default: "arrows", options: "arrows"|"dots"|"numeric", defines the type of navigation controls, if "sides" position was selected controls will be set to "arrows"
+                    navigationOrientation: "horizontal", //default: "horizontal", defines the rotation orientation of the slider
+                    autoPlay: false, //defines if the slider should automatically rotate the slides
+                    autoPlayFrequency: 5000 //defines the rotation speed in ms of the slides if set to autoplay
                 });
                 $("#sample2").imageSlider({
                     sliderWidth: 600,
