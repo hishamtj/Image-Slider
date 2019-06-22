@@ -25,6 +25,9 @@ $.fn.imageSlider = function (options) {
     if (settings.navigationOrientation == null || settings.navigationOrientation.length == 0) {
         settings.navigationOrientation = "horizontal";
     }
+    if (settings.autoPlayFrequency == null || settings.autoPlayFrequency.length == 0) {
+        settings.autoPlayFrequency = 5000;
+    }
     sliderId = this.parent(".imageSlider").index();
     this.parent(".imageSlider").attr("data-slider", sliderId);
     this.parent(".imageSlider").attr("data-direction", settings.sliderDirection);
